@@ -33,8 +33,6 @@ We recommend the following environment (consistent with our experiments):
 - scipy==1.7.3
 - (optional) CUDA for GPU training
 
-## 3.Datasets
-
 ### Install
 ```bash
 conda create -n codemvc python=3.7 -y
@@ -59,7 +57,7 @@ python train.py
 
 ## 5.Experiment Results
 
-<img src="https://github.com/Wangh688/CoDeMVC/figures/results.png"  width="900"  />
+<img src="https://github.com/Wangh688/CoDeMVC/blob/main/figures/results.png"  width="900"  />
 
 ## 6.Acknowledgments
 
