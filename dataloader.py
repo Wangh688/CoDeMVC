@@ -856,85 +856,7 @@ class ThreeSources(Dataset):
 
 
 def load_data(dataset):
-    if dataset == "BDGP":
-        dataset = BDGP('./data/')
-        dims = [1750, 79]
-        view = 2
-        data_size = 2500
-        class_num = 5
-    elif dataset == "MNIST-USPS":
-        dataset = MNIST_USPS('./data/')
-        dims = [784, 784]
-        view = 2
-        class_num = 10
-        data_size = 5000
-    elif dataset == "CCV":
-        dataset = CCV('./data/')
-        dims = [5000, 5000, 4000]
-        view = 3
-        data_size = 6773
-        class_num = 20
-    elif dataset == "Fashion":
-        dataset = Fashion('./data/')
-        dims = [784, 784, 784]
-        view = 3
-        data_size = 10000
-        class_num = 10
-    elif dataset == "Caltech-2V":
-        dataset = Caltech('data/Caltech-5V.mat', view=2)
-        dims = [40, 254]
-        view = 2
-        data_size = 1400
-        class_num = 7
-    elif dataset == "Caltech-3V":
-        dataset = Caltech('data/Caltech-5V.mat', view=3)
-        dims = [40, 254, 928]
-        view = 3
-        data_size = 1400
-        class_num = 7
-    elif dataset == "Caltech-4V":
-        dataset = Caltech('data/Caltech-5V.mat', view=4)
-        dims = [40, 254, 928, 512]
-        view = 4
-        data_size = 1400
-        class_num = 7
-    elif dataset == "Caltech-5V":
-        dataset = Caltech('data/Caltech-5V.mat', view=5)
-        dims = [40, 254, 928, 512, 1984]
-        view = 5
-        data_size = 1400
-        class_num = 7
-    elif dataset == "Synthetic3d":
-        dataset = synthetic3d('./data/')
-        dims = [3,3,3]
-        view = 3
-        data_size = 600
-        class_num = 3
-    elif dataset == "Prokaryotic":
-        dataset = prokaryotic('./data/')
-        dims = [438, 3, 393]
-        view = 3
-        data_size = 551
-        class_num = 4
-    elif dataset == "Cifar10":
-        dataset = cifar_10('./data/')
-        dims = [512, 2048, 1024]
-        view = 3
-        data_size = 50000
-        class_num = 10
-    elif dataset == "Cifar100":
-        dataset = cifar_100('./data/')
-        dims = [512, 2048, 1024]
-        view = 3
-        data_size = 50000
-        class_num = 100
-    elif dataset == "NoisyMNIST":
-        dataset = NoisyMNIST('./data/')
-        dims = [784, 784]
-        view = 2
-        data_size = 50000
-        class_num = 10
-    elif dataset == "COIL20":
+    if dataset == "COIL20":
         dataset = COIL20('./data/')
         dims = [1024, 1024]
         view = 2
@@ -952,62 +874,6 @@ def load_data(dataset):
         view = 4
         data_size = 2688
         class_num = 8
-    elif dataset == "YoutubeFace":
-        dataset = YoutubeFace('./data/')
-        dims = [64, 512, 64, 647, 838]
-        view = 5
-        data_size = 101499
-        class_num = 31
-    elif dataset == "Caltech101":
-        dataset = Caltech101_Test('./data/')
-        dims = [48, 40, 254, 1984, 512, 928]
-        view = 6
-        data_size = 9144
-        class_num = 102
-    elif dataset == "NoisyBDGP":
-        dataset = NoisyBDGP('./data/')
-        dims = [1750, 79]
-        view = 2
-        data_size = 2500
-        class_num = 5
-    elif dataset == "NoisyHW":
-        dataset = NoisyHW('./data/')
-        dims = [216, 76, 64, 6, 240, 47]
-        view = 6
-        data_size = 2000
-        class_num = 10
-    elif dataset == "TinyImage":
-        dataset = TinyImage('./data/')
-        dims = [512, 512, 1280]
-        view = 3
-        data_size = 100000
-        class_num = 200
-    elif dataset == "STL10":
-        dataset = STL10('./data/')
-        dims = [1024, 512, 2048]
-        view = 3
-        data_size = 13000
-        class_num = 10
-    elif dataset == "MSRC-v1":
-        dataset = MSRC_v1('./data/')
-        dims = [24, 576, 512, 256, 254]
-        view = 5
-        data_size = 210
-        class_num = 7  # MSRC typically has 7 classes for v1
-    elif dataset == "NUS-WIDE":
-        dataset = NUS_WIDE('./data/')
-        # Shapes: [(2400, 64), (2400, 144), (2400, 73), (2400, 128), (2400, 225)]
-        dims = [64, 144, 73, 128, 225]
-        view = 5
-        data_size = 2400
-        class_num = 31 # NUS-WIDE-OBJ typically 31
-    elif dataset == "Caltech101-20":
-        dataset = Caltech101_20('./data/')
-        # Shape: [(48, 2386), (40, 2386), (254, 2386), (1984, 2386), (512, 2386), (928, 2386)]
-        dims = [48, 40, 254, 1984, 512, 928]
-        view = 6
-        data_size = 2386
-        class_num = 20
     elif dataset == "Animal":
         dataset = Animal('./data/')
         # Shape: [(11673, 2689), (11673, 2000), (11673, 2001), (11673, 2000)]
@@ -1015,104 +881,12 @@ def load_data(dataset):
         view = 4
         data_size = 11673
         class_num = 20
-    elif dataset == "Reuters-1200":
-        dataset = Reuters_1200('./data/')
-        dims = [2000, 2000, 2000, 2000, 2000]
-        view = 5
-        data_size = 1200
-        class_num = 6
-    elif dataset == "BBCSport":
-        dataset = BBCSport('./data/')
-        dims = [3183, 3203]
-        view = 2
-        data_size = 544
-        class_num = 5
-    elif dataset == "LandUse-21":
-        dataset = LandUse_21('./data/')
-        dims = [20, 59, 40]
-        view = 3
-        data_size = 2100
-        class_num = 21
-    elif dataset == "Scene-15":
-        dataset = Scene_15('./data/')
-        dims = [20, 59, 40]
-        view = 3
-        data_size = 4485
-        class_num = 15
-    elif dataset == "WebKB":
-        dataset = WebKB('./data/')
-        dims = [2949, 334]
-        view = 2
-        data_size = 1051
-        class_num = 2
-    elif dataset == "STL10_4V":
-        dataset = STL10_4V('./data/')
-        dims = [512, 2048, 4096, 1024] 
-        view = 4
-        data_size = 13000
-        class_num = 10
     elif dataset == "Yale":
         dataset = Yale('./data/')
         dims = [4096, 3304, 6750]
         view = 3
         data_size = 165
         class_num = 15
-    elif dataset == "100Leaves":
-        dataset = OneHundredLeaves('./data/')
-        dims = [64, 64, 64]
-        view = 3
-        data_size = 1600
-        class_num = 100
-    elif dataset == "Handwritten":
-        dataset = Handwritten('./data/')
-        dims = [240, 76, 216, 47, 64, 6]
-        view = 6
-        data_size = 2000
-        class_num = 10
-    elif dataset == "3Sources":
-        dataset = ThreeSources('./data/')
-        dims = [3560, 3631, 3068]
-        view = 3
-        data_size = 169
-        class_num = 6
-    elif dataset == "MNIST-10k":
-        dataset = MNIST_10k('./data/')
-        dims = [784, 256]
-        view = 2
-        data_size = 10000
-        class_num = 10
-    elif dataset == "MSRC-v5":
-        dataset = MSRC_v5('./data/')
-        dims = [24, 576, 512, 256, 254]
-        view = 5
-        data_size = 210
-        class_num = 7
-    elif dataset == "Reuters-1500":
-        dataset = Reuters_1500('./data/')
-        # Dims confirmed: [21531, 24892, 34251, 15506, 11547]
-        dims = [21531, 24892, 34251, 15506, 11547]
-        view = 5
-        data_size = 1500
-        class_num = 6 # 0-5
-    elif dataset == "UCI":
-        dataset = UCI('./data/')
-        dims = [240, 76, 6]
-        view = 3
-        data_size = 2000
-        class_num = 10
-    elif dataset == "FashionMNIST":
-        # Dims: (512, 60000), (512, 60000), (1280, 60000). Transposed -> 512, 512, 1280
-        dataset = FashionMNIST('./data/') 
-        dims = [512, 512, 1280] 
-        view = 3
-        data_size = 60000
-        class_num = 10 
-    elif dataset == "NUS-WIDE-OBJ":
-        dataset = NUSWIDE_OBJ('./data/')
-        dims = [65, 226, 145, 74, 129]
-        view = 5
-        data_size = 30000
-        class_num = 31
     elif dataset == "ORL":
         dataset = ORL('./data/')
         # Dims: 4096, 3304, 6750
@@ -1127,20 +901,6 @@ def load_data(dataset):
         view = 3
         data_size = 640
         class_num = 10
-    elif dataset == "NottingHill":
-        dataset = NottingHill('./data/')
-        # Dims confirmed: 2000, 3304, 6750
-        dims = [2000, 3304, 6750] 
-        view = 3
-        data_size = 550
-        class_num = 5
-    elif dataset == "YaleB":
-        dataset = YaleB('./data/')
-        # V1: 1024, V2: 1024
-        dims = [1024, 1024]
-        view = 2
-        data_size = 2414
-        class_num = 38
     else:
         raise NotImplementedError
     return dataset, dims, view, data_size, class_num
