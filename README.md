@@ -24,30 +24,36 @@ Stage 3 fuses debiased content across views and performs clustering.
 
 ## 2. Requirements
 
-We recommend the following environment (consistent with our experiments):
+### Tested environment
+- OS: Windows
+- Python: 3.10
+- PyTorch: 2.5.1
+- CUDA: 12.1 (optional, for GPU training)
 
-- python==3.7.13
-- pytorch==1.12.0
-- numpy==1.21.5
-- scikit-learn==0.22.2.post1
-- scipy==1.7.3
-- (optional) CUDA for GPU training
+> Note: The above versions are the tested setup used in our experiments.
+
+### Python dependencies
+- numpy
+- scipy
+- scikit-learn
 
 ### Install
 ```bash
-conda create -n codemvc python=3.7 -y
+conda create -n codemvc python=3.10 -y
 conda activate codemvc
 
 pip install -r requirements.txt
+
 ```
+---
 
-
-
-## 3.Datasets
+## 3. Datasets
 
 - The all datasets could be downloaded from [cloud](https://pan.baidu.com/s/1HCUQtvkLo-vv_GZ9aXKz0Q?pwd=6688). key: 6688
 
-## 4.Usage
+---
+
+## 4. Usage
 
 ### To train a new model, run:
 
@@ -55,10 +61,14 @@ pip install -r requirements.txt
 python train.py
 ```
 
-## 5.Experiment Results
+---
+
+## 5. Experiment Results
 
 <img src="https://github.com/Wangh688/CoDeMVC/blob/main/figures/results.png"  width="900"  />
 
-## 6.Acknowledgments
+---
+
+## 6. Acknowledgments
 
 Our proposed CoDeMVC are inspired by [SCMVC](), [CausalMVC](), and [CauMVC](). Thanks for these valuable works.
