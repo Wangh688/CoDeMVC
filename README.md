@@ -13,7 +13,7 @@ This repository contains the official PyTorch implementation of **CoDe-MVC**, a 
 
 ## 1. Overview
 
-<img src="figures/pipeline.pdf" width="900" />
+<img src="figures/pipeline.png" width="900" />
 
 **Pipeline of CoDe-MVC.**  
 Stage 1 learns causal disentangled representations (content/style).  
