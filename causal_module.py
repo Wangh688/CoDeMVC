@@ -11,11 +11,9 @@ class CausalDisentangler(nn.Module):
     def __init__(self, feature_dim, content_dim=None):
         super(CausalDisentangler, self).__init__()
         self.feature_dim = feature_dim
-        # Default content_dim is half of feature_dim
         self.content_dim = content_dim if content_dim is not None else feature_dim // 2
         self.style_dim = feature_dim - self.content_dim
         
-        # Content Encoder: Extracts causal/semantic factors
         self.content_encoder = nn.Sequential(
             nn.Linear(feature_dim, feature_dim),
             nn.BatchNorm1d(feature_dim),
@@ -24,7 +22,6 @@ class CausalDisentangler(nn.Module):
             nn.BatchNorm1d(self.content_dim)
         )
         
-        # Style Encoder: Extracts view-specific/noise factors
         self.style_encoder = nn.Sequential(
             nn.Linear(feature_dim, feature_dim),
             nn.BatchNorm1d(feature_dim),
@@ -33,7 +30,6 @@ class CausalDisentangler(nn.Module):
             nn.BatchNorm1d(self.style_dim)
         )
         
-        # Combiner: Reconstructs feature from (C, S)
         self.combiner = nn.Sequential(
             nn.Linear(feature_dim, feature_dim),
             nn.BatchNorm1d(feature_dim),
@@ -63,11 +59,7 @@ class CausalDebiasedMultiViewClustering(nn.Module):
         self.num_views = num_views
         self.feature_dim = feature_dim
         self.device = device
-        
-        # Shared Disentangler across views (or separate? enforcing shared semantic space implies shared disentangler might be better, 
-        # but views have different properties. Let's use separate disentanglers but project to shared content relationship).
-        # Actually, for SCMVC, the encoders are view-specific. The 'content' S should be aligned.
-        # We use a ModuleList of disentanglers.
+     
         self.disentanglers = nn.ModuleList([
             CausalDisentangler(feature_dim) for _ in range(num_views)
         ])
@@ -86,7 +78,6 @@ class CausalDebiasedMultiViewClustering(nn.Module):
         s_list = []
         z_rec_list = []
         
-        # 1. Disentangle and Reconstruct
         for v in range(self.num_views):
             z = view_features_list[v]
             dis = self.disentanglers[v]
@@ -101,7 +92,6 @@ class CausalDebiasedMultiViewClustering(nn.Module):
         if not return_counterfactuals:
             return c_list, None, z_rec_list, None
 
-        # 2. Generate Counterfactuals (Style Mixup instead of Hard Shuffle)
         c_cf_list = []
         z_cf_list = []
         
@@ -109,18 +99,14 @@ class CausalDebiasedMultiViewClustering(nn.Module):
             dis = self.disentanglers[v]
             c = c_list[v]
             s = s_list[v]
-            
-            # Soft Mixup: Instead of replacing 100% of Style, we mix it.
-            # This ensures counterfactuals stay closer to the data manifold.
+
             idx = torch.randperm(s.size(0))
-            lambda_mix = 0.4  # 40% of foreign style, 60% original
+            lambda_mix = 0.4
             s_mixed = (1 - lambda_mix) * s + lambda_mix * s[idx]
-            
-            # Generate z_cf
+
             z_cf = dis.reconstruct(c, s_mixed)
             z_cf_list.append(z_cf)
             
-            # Extract c from z_cf (Should be close to c)
             c_extracted, _ = dis(z_cf)
             c_cf_list.append(c_extracted)
             
@@ -146,38 +132,26 @@ class CausalContrastiveLoss(nn.Module):
         device = view_features[0].device
         num_views = len(view_features)
         
-        # 1. Reconstruction Loss: Ensure Disentangler preserves information
         loss_rec = 0.0
         for v in range(num_views):
             loss_rec += self.mse(view_features[v], z_rec_list[v])
         loss_rec /= num_views
-        
-        # 2. Invariance Loss: Content should be stable against Style Shuffle
-        # L_inv = || c - c_cf ||^2
+
         loss_inv = 0.0
         if c_cf_list is not None:
             for v in range(num_views):
                 loss_inv += self.mse(c_list[v].detach(), c_cf_list[v])
             loss_inv /= num_views
-        
-        # 3. Content Contrastive Loss (Cross-View Consistency)
-        # We want C_v1 to be similar to C_v2 (Alignment)
+
         loss_align = 0.0
         for i in range(num_views):
             for j in range(i + 1, num_views):
-                # Standard Contrastive on C
-                # Normalize
+
                 z_i = F.normalize(c_list[i], dim=1)
                 z_j = F.normalize(c_list[j], dim=1)
                 
                 sim = torch.matmul(z_i, z_j.T) / self.temperature
-                
-                # NT-Xent simplified or just use diagonal alignment
-                # SCMVC uses a specific weighted contrastive, here we use standard infoNCE logic
-                # or match the implementation of 'ContrastiveLoss' in loss.py
-                # Let's use a simple alignment for the 'causal' part
-                
-                # Positive pairs: Diagonals
+
                 labels = torch.arange(z_i.size(0)).to(device)
                 l1 = F.cross_entropy(sim, labels)
                 l2 = F.cross_entropy(sim.T, labels)
@@ -187,7 +161,6 @@ class CausalContrastiveLoss(nn.Module):
 
         return loss_rec, loss_inv, loss_align
 
-# Legacy class for compatibility if needed, but we don't use it
 class ViewInvarianceLoss(nn.Module):
     def __init__(self):
         super().__init__()

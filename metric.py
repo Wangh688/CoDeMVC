@@ -64,7 +64,6 @@ def valid(model, device, dataset, view, data_size, class_num, eval_h=False, epoc
             H_list.append(H.cpu().data.numpy())
             labels_list.append(y.numpy())
 
-    # Concatenate all batches
     zs = [np.concatenate(z, axis=0) for z in zs_list]
     rs = [np.concatenate(r, axis=0) for r in rs_list]
     H = np.concatenate(H_list, axis=0)
@@ -90,7 +89,6 @@ def valid(model, device, dataset, view, data_size, class_num, eval_h=False, epoc
                                                                                      v + 1, ari,
                                                                                      v + 1, pur))
 
-    # Clustering results on global features
     kmeans = KMeans(n_clusters=class_num, n_init=100)
     y_pred = kmeans.fit_predict(H)
     nmi, ari, acc, pur = evaluate(labels, y_pred)

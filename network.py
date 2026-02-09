@@ -2,17 +2,13 @@ import torch.nn as nn
 from torch.nn.functional import normalize
 import torch
 
-# Causal Reweighting Module (CRM)
 class CausalReweightingModule(nn.Module):
     def __init__(self, channel, reduction=16):
         super(CausalReweightingModule, self).__init__()
-        # 1. Squeeze: Global Context (Identity for MLP features as they are already global descriptors)
         self.avg_pool = nn.AdaptiveAvgPool1d(1)
-        
-        # Ensure mid_channel is at least 1
+    
         mid_channel = max(channel // reduction, 1)
 
-        # 2. Excitation: Predict Causal Score
         self.fc = nn.Sequential(
             nn.Linear(channel, mid_channel, bias=False),
             nn.ReLU(inplace=True),
@@ -21,17 +17,11 @@ class CausalReweightingModule(nn.Module):
         )
 
     def forward(self, x):
-        # x: [Batch, Channel]
         b, c = x.size()
-        # For MLP features, x is already the context. 
-        # If we wanted batch statistics we would pool over batch, but SE is usually per-instance.
         y = self.fc(x) 
-        # Residual Causal Reweighting: z' = z * (1 + epsilon * y)
-        # This prevents the initial "shock" of feature filtering and stabilizes warmup.
         epsilon = 0.1
         return x * (1 + epsilon * y)
-
-# Encoder
+    
 class Encoder(nn.Module):
     def __init__(self, input_dim, feature_dim, use_crm=True):
         super(Encoder, self).__init__()
@@ -54,7 +44,6 @@ class Encoder(nn.Module):
             z = self.crm(z)
         return z
 
-# Decoder
 class Decoder(nn.Module):
     def __init__(self, input_dim, feature_dim):
         super(Decoder, self).__init__()
@@ -71,7 +60,6 @@ class Decoder(nn.Module):
     def forward(self, x):
         return self.decoder(x)
 
-# SCMVC Network
 class Network(nn.Module):
     def __init__(self, view, input_size, feature_dim, high_feature_dim, device, use_crm=True):
         super(Network, self).__init__()
@@ -82,19 +70,16 @@ class Network(nn.Module):
             self.encoders.append(Encoder(input_size[v], feature_dim, use_crm=use_crm).to(device))
             self.decoders.append(Decoder(input_size[v], feature_dim).to(device))
 
-        # global features fusion layer
         self.feature_fusion_module = nn.Sequential(
             nn.Linear(self.view * feature_dim, 256),
             nn.ReLU(),
             nn.Linear(256, high_feature_dim)
         )
 
-        # view-consensus features learning layer
         self.common_information_module = nn.Sequential(
             nn.Linear(feature_dim, high_feature_dim)
         )
 
-    # global feature fusion
     def feature_fusion(self, zs, zs_gradient):
         input = torch.cat(zs, dim=1) if zs_gradient else torch.cat(zs, dim=1).detach()
         return normalize(self.feature_fusion_module(input),dim=1)
