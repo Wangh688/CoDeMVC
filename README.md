@@ -42,54 +42,6 @@ CoDe-MVC follows a progressive three-stage training paradigm:
 3. **Cross-View Fusion and Clustering**  
    Debiased multi-view representations are fused into a unified representation for final clustering.
 
----
-
-## Requirements
-
-### Tested Environment
-
-- OS: Windows
-- Python: 3.10
-- PyTorch: 2.5.1
-- CUDA: 12.1 (optional, for GPU training)
-
-### Installation
-
-```bash
-conda create -n codemvc python=3.10 -y
-conda activate codemvc
-pip install -r requirements.txt
-```
-
-## Datasets
-
-We evaluate CoDe-MVC on seven widely used multi-view clustering benchmark datasets:
-
-- Yale
-- ORL
-- EYaleB
-- COIL20
-- OutdoorScene
-- ALOI
-- Animal
-
-The datasets can be downloaded from the following cloud link:
-
-- Baidu Cloud: [Download Link](https://pan.baidu.com/s/1HCUQtvkLo-vv_GZ9aXKz0Q?pwd=6688)
-- Extraction code: `6688`
-
-Please organize the downloaded files according to the expected dataset directory structure before training.
-
-------
-
-## Training
-
-To train CoDe-MVC from scratch, run:
-
-```
-python train.py
-```
-
 ------
 
 ## Experimental Results
@@ -113,3 +65,4 @@ This work is related to prior studies on deep multi-view clustering, causal repr
 - This repository provides the official implementation of **CoDe-MVC**.
 - Pretrained models are currently **not provided**.
 - More documentation and code annotations may be added in future updates.
+- The source code will be released publicly upon acceptance of the paper.

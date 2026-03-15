@@ -1,4 +1,0 @@
-torch==2.5.1
-numpy
-scipy
-scikit-learn
